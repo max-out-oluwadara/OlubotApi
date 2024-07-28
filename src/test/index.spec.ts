@@ -1,24 +1,32 @@
 import request from 'supertest';
 
-import server, { startServer, stopServer } from '../index';
+import { startServer, stopServer } from '../server';
+import app from '../app';
+import loadConfig from '../config/env';
 
 describe('Express Server', () => {
-  beforeAll(() => {
+  let serverInstance: ReturnType<typeof app.listen>;
+
+  beforeAll(async () => {
     jest.setTimeout(10000); // Set timeout for the hook
     console.log('Starting server...');
-    startServer();
+
+    const config = await loadConfig();
+    const port = config.PORT || 3000;
+    serverInstance = await startServer(port);
+
     console.log('Server started.');
   });
 
   afterAll(() => {
     jest.setTimeout(10000); // Set timeout for the hook
     console.log('Stopping server...');
-    stopServer();
+    stopServer(serverInstance);
     console.log('Server stopped.');
   });
 
   it('should return 404 for unknown routes', async () => {
-    const response = await request(server).get('/unknown-route');
+    const response = await request(app).get('/unknown-route');
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
       success: false,
@@ -28,12 +36,12 @@ describe('Express Server', () => {
   });
 
   it('should serve Swagger docs', async () => {
-    const response = await request(server).get('/api-docs').redirects(1);
+    const response = await request(app).get('/api-docs').redirects(1);
     expect(response.status).toBe(200);
   });
 
   it('should return Hello, world! for the home route', async () => {
-    const response = await request(server).get('/');
+    const response = await request(app).get('/');
     expect(response.status).toBe(200);
     expect(response.text).toBe('Hello, world!');
   });
