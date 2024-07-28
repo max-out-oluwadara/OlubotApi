@@ -1,13 +1,12 @@
 import request from 'supertest';
+
 import server, { startServer, stopServer } from '../index';
 
 describe('Express Server', () => {
-  let serverInstance: any;
-
   beforeAll(() => {
     jest.setTimeout(10000); // Set timeout for the hook
     console.log('Starting server...');
-    serverInstance = startServer();
+    startServer();
     console.log('Server started.');
   });
 
@@ -24,7 +23,7 @@ describe('Express Server', () => {
     expect(response.body).toEqual({
       success: false,
       status: 404,
-      message: 'Route not found: /unknown-route'
+      message: 'Route not found: /unknown-route',
     });
   });
 

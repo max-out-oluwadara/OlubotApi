@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
 class HttpError extends Error {
   status_code: number;
@@ -62,10 +62,10 @@ const errorHandler = (
   err: HttpError,
   _req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction, // eslint-disable-line @typescript-eslint/no-unused-vars
 ) => {
   const { success, status_code, message } = err;
-  const cleanedMessage = message.replace(/"/g, "");
+  const cleanedMessage = message.replace(/"/g, '');
   res.status(status_code).json({
     success,
     status_code,
