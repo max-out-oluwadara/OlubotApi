@@ -1,27 +1,29 @@
 import express, { Express, Request, Response } from 'express';
 import cors, { CorsOptions } from 'cors';
-import log from './config/log';
 import { Server } from 'http';
+
+import log from './config/log';
 import limiter from './config/limiter';
 import { swaggerUi, specs } from './swagger';
-import 'dotenv/config';
 import { routeNotFound, errorHandler } from './middleware/error';
+
+import 'dotenv/config';
 
 const server: Express = express();
 
 const port = process.env.PORT || 3000;
 
 const corsOptions: CorsOptions = {
-  origin: "*", // Allow this origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE', "OPTIONS", "PATCH"], // Allow these HTTP methods
+  origin: '*', // Allow this origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // Allow these HTTP methods
   allowedHeaders: [
     'Content-Type',
     'Origin',
     'X-Requested-With',
-    'Authorization'
+    'Authorization',
   ], // Allow these headers
   credentials: false, // Allow cookies and other credentials
-  optionsSuccessStatus: 204 // Response status for preflight requests
+  optionsSuccessStatus: 204, // Response status for preflight requests
 };
 
 // Use the CORS middleware with the specified options
@@ -38,8 +40,10 @@ server.get('/', (req: Request, res: Response) => {
 
 // Conditionally use Bull in non-test environments
 if (process.env.NODE_ENV !== 'test') {
-  const ServerAdapter = require('./views/bull-board').default;
-  server.use('/admin/queues', ServerAdapter.getRouter());
+  import('./views/bull-board').then((module) => {
+    const ServerAdapter = module.default;
+    server.use('/admin/queues', ServerAdapter.getRouter());
+  });
 }
 
 // Middleware for handling 404 - Not Found
