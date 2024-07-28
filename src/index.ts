@@ -1,99 +1,34 @@
-import express, { Express, Request, Response } from 'express';
-import cors, { CorsOptions } from 'cors';
-import { Server } from 'http';
-import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+dotenv.config();
 
 import log from './config/log';
-import limiter from './config/limiter';
-import { swaggerUi, specs } from './swagger';
-import { routeNotFound, errorHandler } from './middleware/error';
+import { startServer, stopServer } from './server';
+import loadConfig from './config/env';
+import initializeDB from './db/connection';
 
-import 'dotenv/config';
+const initialize = async () => {
+  try {
+    const config = await loadConfig();
+    const port = config.PORT;
 
-const server: Express = express();
+    // Initialize the database connection before starting the server
+    await initializeDB();
 
-const port = process.env.PORT || 3000;
+    const serverInstance = await startServer(port);
 
-const corsOptions: CorsOptions = {
-  origin: '*', // Allow this origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // Allow these HTTP methods
-  allowedHeaders: [
-    'Content-Type',
-    'Origin',
-    'X-Requested-With',
-    'Authorization',
-  ], // Allow these headers
-  credentials: false, // Allow cookies and other credentials
-  optionsSuccessStatus: 204, // Response status for preflight requests
-};
-
-// Use the CORS middleware with the specified options
-server.use(cors(corsOptions));
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: true }));
-server.use(limiter);
-
-// Home route
-server.get('/', (req: Request, res: Response) => {
-  res.send('Hello, world!');
-});
-
-//Health Check
-server.get('/health', (req, res) => {
-  res.send('Server is healthy');
-});
-
-// Setup Swagger
-server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-// Conditionally use Bull in non-test environments
-if (process.env.NODE_ENV !== 'test') {
-  import('./views/bull-board').then((module) => {
-    const ServerAdapter = module.default;
-    server.use('/admin/queues', ServerAdapter.getRouter());
-  });
-}
-
-// Middleware for handling 404 - Not Found
-server.use(routeNotFound);
-
-// Middleware for handling errors
-server.use(errorHandler);
-
-let serverInstance: Server;
-
-if (require.main === module) {
-  serverInstance = server.listen(port, () => {
-    log.info(`App listening at port ${port}`);
-  });
-
-  // Graceful shutdown
-  process.on('SIGTERM', () => {
-    log.info('SIGTERM signal received: closing HTTP server');
-    serverInstance.close(() => {
-      log.info('HTTP server closed');
+    process.on('SIGTERM', () => {
+      log.info('SIGTERM signal received: closing HTTP server');
+      stopServer(serverInstance);
     });
-  });
 
-  process.on('SIGINT', () => {
-    log.info('SIGINT signal received: closing HTTP server');
-    serverInstance.close(() => {
-      log.info('HTTP server closed');
+    process.on('SIGINT', () => {
+      log.info('SIGINT signal received: closing HTTP server');
+      stopServer(serverInstance);
     });
-  });
-}
-
-export const startServer = () => {
-  serverInstance = server.listen(port, () => {
-    log.info(`App listening at port ${port}`);
-  });
-  return serverInstance;
-};
-
-export const stopServer = () => {
-  if (serverInstance) {
-    serverInstance.close();
+  } catch (error) {
+    log.error(`Failed to initialize the server: ${error.message}`);
+    process.exit(1);
   }
 };
 
-export default server;
+initialize();
