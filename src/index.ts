@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import cors, { CorsOptions } from 'cors';
 import { Server } from 'http';
+import bodyParser from 'body-parser';
 
 import log from './config/log';
 import limiter from './config/limiter';
@@ -28,15 +29,22 @@ const corsOptions: CorsOptions = {
 
 // Use the CORS middleware with the specified options
 server.use(cors(corsOptions));
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
 server.use(limiter);
-
-// Setup Swagger
-server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Home route
 server.get('/', (req: Request, res: Response) => {
   res.send('Hello, world!');
 });
+
+//Health Check
+server.get('/health', (req, res) => {
+  res.send('Server is healthy');
+});
+
+// Setup Swagger
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Conditionally use Bull in non-test environments
 if (process.env.NODE_ENV !== 'test') {

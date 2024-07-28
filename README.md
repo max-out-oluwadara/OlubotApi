@@ -73,3 +73,35 @@ max-out-oluwadara/OlubotApi/
 ├── tsconfig.json      # TypeScript configuration file
 ├── README.md          # Project documentation
 └── ...
+
+
+Code Quality and Formatting
+ESLint and Prettier
+This project uses ESLint and Prettier to maintain code quality and ensure consistent formatting.
+
+Setup Instructions
+Install Dependencies:
+Make sure you have the required dependencies installed:
+
+bash
+Copy code
+npm install
+Linting:
+To check for linting errors in your code, run:
+
+bash
+Copy code
+npm run lint
+Formatting:
+To format your code according to the project's Prettier configuration, run:
+
+bash
+Copy code
+npm run format
+Configuration Files
+.eslintrc.json: Contains the ESLint configuration.
+.prettierrc: Contains the Prettier configuration.
+Scripts in package.json
+"lint": Runs ESLint to check for code quality issues.
+"format": Runs Prettier to format the code.
+By following these steps and using these tools, we ensure our codebase remains clean, consistent, and easy to maintain.
