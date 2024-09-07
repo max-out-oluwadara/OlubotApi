@@ -1,8 +1,14 @@
 import rateLimit from 'express-rate-limit';
 
+import config from './index'; // Importing the config from config/index.ts
+
+const windowMs = config.RATE_LIMIT_WINDOW_MS || 60000; // default to 60 seconds
+const maxRequests = config.RATE_LIMIT_MAX_REQUESTS || 100; // default to 100 requests
+
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: windowMs,
+  max: maxRequests,
+  message: 'Too many requests from this IP, please try again after a minute',
 });
 
 export default limiter;

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
 class HttpError extends Error {
   status_code: number;
@@ -53,19 +53,31 @@ class ServerError extends HttpError {
   }
 }
 
-const routeNotFound = (req: Request, res: Response, next: NextFunction) => {
+const routeNotFound = (req: Request, res: Response) => {
   const message = `Route not found: ${req.originalUrl}`;
   res.status(404).json({ success: false, status: 404, message });
 };
 
 const errorHandler = (
-  err: HttpError,
+  err: unknown,
   _req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ) => {
-  const { success, status_code, message } = err;
-  const cleanedMessage = message.replace(/"/g, "");
+  let status_code = 500;
+  let message = 'Internal Server Error';
+  let success = false;
+
+  if (err instanceof HttpError) {
+    status_code = err.status_code;
+    message = err.message;
+    success = err.success;
+  } else if (err instanceof Error) {
+    message = err.message;
+  }
+
+  const cleanedMessage = message.replace(/"/g, '');
+
   res.status(status_code).json({
     success,
     status_code,
