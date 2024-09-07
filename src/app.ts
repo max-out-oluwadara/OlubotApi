@@ -6,7 +6,7 @@ import serverAdapter from './utils/bullBoard';
 import corsOptions from './config/corsOprions';
 import limiter from './config/limiter';
 import * as routes from './routes';
-import { swaggerUi, specs } from './swagger';
+// import { swaggerUi, specs } from './swagger';
 import { routeNotFound, errorHandler } from './middleware/error';
 
 const app: Express = express();
@@ -32,7 +32,7 @@ app.use('/upload', routes.fileRoute);
 app.use('/admin/queues', serverAdapter.getRouter());
 
 // Setup Swagger (properly typed `specs`)
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Middleware for handling 404 - Not Found
 app.use(routeNotFound);
