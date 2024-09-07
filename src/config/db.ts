@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 
 import log from './log';
-import loadConfig from './env';
+import config from './index'; // Correct import path for the config
 
 const connectDB = async () => {
   try {
-    const config = await loadConfig();
     await mongoose.connect(config.MONGO_URI, {});
 
     mongoose.connection.on('connected', () => {

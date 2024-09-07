@@ -18,13 +18,13 @@ module.exports = {
     'prettier/prettier': 'error',
     '@typescript-eslint/no-unused-vars': [
       'off', //no use variable warning
-      { 
-        'vars': 'all', 
-        'varsIgnorePattern': '^_', 
-        'args': 'after-used', 
-        'argsIgnorePattern': '^_' 
-      }
-    ], 
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
     'node/no-unsupported-features/es-syntax': 'off',
     'node/no-missing-import': 'off',
     'node/no-extraneous-import': 'off',

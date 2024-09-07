@@ -1,15 +1,5 @@
-import { Router } from 'express';
-
-const router = Router();
-
-// Home route
-router.get('/', (req, res) => {
-  res.send('Hello, world!');
-});
-
-// Health Check
-router.get('/health', (req, res) => {
-  res.send('Server is healthy');
-});
-
-export default router;
+export * from './auth';
+export * from './tweet';
+export * from './mention';
+export * from './response';
+export * from './file';

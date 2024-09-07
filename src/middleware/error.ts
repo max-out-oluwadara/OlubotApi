@@ -53,19 +53,31 @@ class ServerError extends HttpError {
   }
 }
 
-const routeNotFound = (req: Request, res: Response, next: NextFunction) => {
+const routeNotFound = (req: Request, res: Response) => {
   const message = `Route not found: ${req.originalUrl}`;
   res.status(404).json({ success: false, status: 404, message });
 };
 
 const errorHandler = (
-  err: HttpError,
+  err: unknown,
   _req: Request,
   res: Response,
-  _next: NextFunction, // eslint-disable-line @typescript-eslint/no-unused-vars
+  _next: NextFunction,
 ) => {
-  const { success, status_code, message } = err;
+  let status_code = 500;
+  let message = 'Internal Server Error';
+  let success = false;
+
+  if (err instanceof HttpError) {
+    status_code = err.status_code;
+    message = err.message;
+    success = err.success;
+  } else if (err instanceof Error) {
+    message = err.message;
+  }
+
   const cleanedMessage = message.replace(/"/g, '');
+
   res.status(status_code).json({
     success,
     status_code,

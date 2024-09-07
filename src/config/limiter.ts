@@ -1,12 +1,9 @@
 import rateLimit from 'express-rate-limit';
 
-const windowMs = process.env.RATE_LIMIT_WINDOW_MS
-  ? parseInt(process.env.RATE_LIMIT_WINDOW_MS)
-  : 60000; // default to 60 seconds
+import config from './index'; // Importing the config from config/index.ts
 
-const maxRequests = process.env.RATE_LIMIT_MAX_REQUESTS
-  ? parseInt(process.env.RATE_LIMIT_MAX_REQUESTS)
-  : 100; // default to 100 requests
+const windowMs = config.RATE_LIMIT_WINDOW_MS || 60000; // default to 60 seconds
+const maxRequests = config.RATE_LIMIT_MAX_REQUESTS || 100; // default to 100 requests
 
 const limiter = rateLimit({
   windowMs: windowMs,

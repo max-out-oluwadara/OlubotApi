@@ -3,12 +3,11 @@ dotenv.config();
 
 import log from './config/log';
 import { startServer, stopServer } from './server';
-import loadConfig from './config/env';
+import config from './config/index'; // Correct import path
 import initializeDB from './db/connection';
 
 const initialize = async () => {
   try {
-    const config = await loadConfig();
     const port = config.PORT;
 
     // Initialize the database connection before starting the server
