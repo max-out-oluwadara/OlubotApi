@@ -2,7 +2,7 @@ import request from 'supertest';
 
 import { startServer, stopServer } from '../server';
 import app from '../app';
-import loadConfig from '../config/env';
+import config from '../config/index'; // Correctly import as an object
 
 describe('Express Server', () => {
   let serverInstance: ReturnType<typeof app.listen>;
@@ -11,8 +11,7 @@ describe('Express Server', () => {
     jest.setTimeout(10000); // Set timeout for the hook
     console.log('Starting server...');
 
-    const config = await loadConfig();
-    const port = config.PORT || 3000;
+    const port = config.PORT || 3000; // Access the config object directly
     serverInstance = await startServer(port);
 
     console.log('Server started.');
