@@ -17,10 +17,10 @@ describe('Express Server', () => {
     console.log('Server started.');
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     jest.setTimeout(10000); // Set timeout for the hook
     console.log('Stopping server...');
-    stopServer(serverInstance);
+    await stopServer(serverInstance); // Ensure server stops cleanly
     console.log('Server stopped.');
   });
 
@@ -34,16 +34,17 @@ describe('Express Server', () => {
     });
   });
 
-  it('should serve Swagger docs', async () => {
-    const response = await request(app).get('/api-docs').redirects(1);
-    expect(response.status).toBe(200);
-  });
-
   it('should return Hello, world! for the home route', async () => {
     const response = await request(app).get('/');
     expect(response.status).toBe(200);
     expect(response.text).toBe('Hello, world!');
   });
 
-  // Add more tests as needed
+  // Remove the Swagger test since it's commented out in the app
+  /*
+  it('should serve Swagger docs', async () => {
+    const response = await request(app).get('/api-docs').redirects(1);
+    expect(response.status).toBe(200);
+  });
+  */
 });
