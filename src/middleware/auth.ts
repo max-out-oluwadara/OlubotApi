@@ -1,12 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction } from 'express'; // Only import what's needed
 
 import { verifyToken } from '../utils/index';
 import { AuthRequest } from '../types/express';
-import { Unauthorized, HttpError } from './error';
+import { Unauthorized } from './error'; // Keep only the necessary error class
 
 const authMiddleware = (
   req: AuthRequest,
-  res: Response,
+  _res: unknown,
   next: NextFunction,
 ) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');

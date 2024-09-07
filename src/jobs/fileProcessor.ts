@@ -4,7 +4,7 @@ import { File } from '../models/file.model';
 import { io } from '../config/socket';
 
 export const processFileJob = async (job: Job) => {
-  const { fileId, filename, user, imageUrl } = job.data;
+  const { fileId, /* filename, */ user, imageUrl } = job.data; // Commented out `filename`
 
   try {
     // Simulate file processing

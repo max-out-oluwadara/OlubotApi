@@ -3,7 +3,7 @@ dotenv.config();
 
 import log from './config/log';
 import { startServer, stopServer } from './server';
-import config from './config/index'; // Correct import path
+import config from './config/index';
 import initializeDB from './db/connection';
 
 const initialize = async () => {

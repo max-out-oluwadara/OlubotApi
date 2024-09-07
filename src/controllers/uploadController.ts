@@ -28,10 +28,10 @@ export const uploadFile = async (req: Request, res: Response) => {
       imageUrl: file.path,
     });
 
-    res
+    return res
       .status(201)
       .json({ message: 'File uploaded and processing started', file: newFile });
   } catch (error) {
-    res.status(500).json({ message: 'Error uploading file', error });
+    return res.status(500).json({ message: 'Error uploading file', error });
   }
 };
