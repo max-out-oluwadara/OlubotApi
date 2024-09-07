@@ -1,24 +1,25 @@
-import swaggerJsdoc = require('swagger-jsdoc');
+import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Express API with Swagger',
-      version: '1.0.0',
-      description:
-        'A simple CRUD API application made with Express and documented with Swagger',
-    },
-    servers: [
-      {
-        url: 'http://localhost:3000',
-      },
-    ],
+const definition: swaggerJsdoc.OAS3Definition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Your API Title',
+    version: '1.0.0',
+    description: 'Your API description',
   },
-  apis: ['./src/routes/*.ts'], // files containing annotations as above
+  servers: [
+    {
+      url: 'http://localhost:3000',
+      description: 'Development server',
+    },
+  ],
 };
 
-const specs = swaggerJsdoc(options);
+const options: swaggerJsdoc.Options = {
+  definition,
+  apis: ['./src/routes/*.ts'], // Path to your API docs
+};
 
-export { swaggerUi, specs };
+export const specs = swaggerJsdoc(options);
+export { swaggerUi };

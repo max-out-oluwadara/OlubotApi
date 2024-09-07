@@ -25,7 +25,9 @@ const initialize = async () => {
       stopServer(serverInstance);
     });
   } catch (error) {
-    log.error(`Failed to initialize the server: ${error.message}`);
+    if (error instanceof Error) {
+      log.error(`Failed to start the server: ${error.message}`);
+    }
     process.exit(1);
   }
 };

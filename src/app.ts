@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Define Routes
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.send('Hello, world!');
 });
 
@@ -31,7 +31,7 @@ app.use('/upload', routes.fileRoute);
 // Integrate Bull Board
 app.use('/admin/queues', serverAdapter.getRouter());
 
-// Setup Swagger
+// Setup Swagger (properly typed `specs`)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Middleware for handling 404 - Not Found

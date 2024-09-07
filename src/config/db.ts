@@ -25,7 +25,9 @@ const connectDB = async () => {
 
     log.info(`MongoDB Connected: ${mongoose.connection.host}`);
   } catch (error) {
-    log.error(`Error: ${error.message}`);
+    if (error instanceof Error) {
+      log.error(`Failed to start the server: ${error.message}`);
+    }
     process.exit(1);
   }
 };
