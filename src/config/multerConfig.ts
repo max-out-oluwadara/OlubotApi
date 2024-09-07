@@ -22,7 +22,7 @@ interface CloudinaryParams {
 // Configure Multer storage with Cloudinary
 const cloudinaryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: (req: Request, file: Express.Multer.File): CloudinaryParams => ({
+  params: (_req: Request, file: Express.Multer.File): CloudinaryParams => ({
     folder: 'uploads',
     format: 'png',
     public_id: file.originalname,

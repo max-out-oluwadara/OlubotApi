@@ -1,5 +1,3 @@
-import http from 'http';
-
 import app from './app';
 import log from './config/log';
 
@@ -13,7 +11,9 @@ const startServer = async (port: number | string) => {
 
     return serverInstance;
   } catch (error) {
-    log.error(`Failed to start the server: ${error.message}`);
+    if (error instanceof Error) {
+      log.error(`Failed to start the server: ${error.message}`);
+    }
     process.exit(1);
   }
 };

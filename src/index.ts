@@ -3,7 +3,7 @@ dotenv.config();
 
 import log from './config/log';
 import { startServer, stopServer } from './server';
-import config from './config/index'; // Correct import path
+import config from './config/index';
 import initializeDB from './db/connection';
 
 const initialize = async () => {
@@ -25,7 +25,9 @@ const initialize = async () => {
       stopServer(serverInstance);
     });
   } catch (error) {
-    log.error(`Failed to initialize the server: ${error.message}`);
+    if (error instanceof Error) {
+      log.error(`Failed to start the server: ${error.message}`);
+    }
     process.exit(1);
   }
 };

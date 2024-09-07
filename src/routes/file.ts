@@ -5,7 +5,7 @@ import { File } from '../models/file.model'; // Import the File model
 
 const fileRoute = Router();
 
-fileRoute.get('/upload', (req, res) => {
+fileRoute.get('/upload', (_req, res) => {
   console.log('hello');
   res.send('hello');
 });
@@ -35,13 +35,14 @@ fileRoute.post('/upload', upload.single('image'), async (req, res) => {
 
     await newFile.save();
 
-    res
+    return res
       .status(201)
       .json({ message: 'File uploaded successfully', file: newFile });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: 'Error uploading file', details: error.message });
+    return res.status(500).json({
+      error: 'Error uploading file',
+      details: (error as Error).message,
+    });
   }
 });
 

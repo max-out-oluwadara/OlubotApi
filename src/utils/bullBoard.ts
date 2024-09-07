@@ -1,7 +1,5 @@
 import { ExpressAdapter } from '@bull-board/express';
 import { createBullBoard } from '@bull-board/api';
-import express from 'express';
-//import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { BullAdapter } from '@bull-board/api/dist/src/queueAdapters/bull';
 
 import { emailQueue } from '../config/queue';
