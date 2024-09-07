@@ -11,11 +11,6 @@
         "src": "/(.*)",
         "dest": "/src/index.ts"
       }
-    ],
-    "env": {
-      "NODE_ENV": "production",
-      "DATABASE_URL": "@database-url",
-      "API_KEY": "@api-key"
-    }
+    ]
   }
   
